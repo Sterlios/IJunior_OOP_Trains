@@ -13,17 +13,17 @@
 
         public bool Request()
         {
-            const string yesWord = "y";
-            const string noWord = "n";
+            const string YesWord = "y";
+            const string NoWord = "n";
 
             _printer.Display(this);
             string command = _answerer.Get();
 
-            if (command.ToLower() == yesWord)
+            if (command.ToLower() == YesWord)
             {
                 return true;
             }
-            else if (command.ToLower() == noWord)
+            else if (command.ToLower() == NoWord)
             {
                 return false;
             }
