@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Trains
+﻿namespace Trains
 {
     class ErrorMessage : IString
     {

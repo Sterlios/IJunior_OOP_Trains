@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Trains
+﻿namespace Trains
 {
     class ElectricCarriage : Carriage
     {
@@ -10,7 +6,7 @@ namespace Trains
 
         public override string ToString()
         {
-            return "Электричка";
+            return "Электричка " + base.ToString();
         }
     }
 }

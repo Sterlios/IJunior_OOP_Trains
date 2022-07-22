@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Trains
+﻿namespace Trains
 {
     class DirectionCreator : ICreator
     {
-        private IDataInput _dataInput;
-        private IPrinter _display;
+        private INumberInput _dataInput;
+        private IDisplay _display;
 
-        public DirectionCreator(IPrinter display, IDataInput dataInput)
+        public DirectionCreator(IDisplay display, INumberInput dataInput)
         {
             _display = display;
             _dataInput = dataInput;
@@ -17,8 +13,8 @@ namespace Trains
 
         public object Create()
         {
-            City outCity = (City)_dataInput.GetNumber();
-            City inCity = (City)_dataInput.GetNumber();
+            City outCity = (City)_dataInput.Get();
+            City inCity = (City)_dataInput.Get();
 
             if (outCity == inCity)
             {
@@ -26,7 +22,7 @@ namespace Trains
             }
 
             Direction direction = new Direction(outCity, inCity);
-            _display.Print(direction);
+            _display.Display(direction);
 
             return direction;
         }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Trains
+﻿namespace Trains
 {
     enum CarriageType
     {
@@ -11,17 +7,26 @@ namespace Trains
         ElectricCarriage
     }
 
-    class TrainCreator : ICreator
+    class TrainCreator : ICreator, IString
     {
-        private IPrinter _display;
+        private IDisplay _display;
+        private IDisplay _carriageDisplay;
+        private IDisplay _trainDisplay;
         private int _ticketsCount;
-        private IDataInput _dataInput;
+        private INumberInput _dataInput;
+        private Direction _direction;
 
-        public TrainCreator(IPrinter display, IDataInput dataInput)
+        public TrainCreator(IDisplay display, INumberInput dataInput)
         {
             _ticketsCount = 0;
             _display = display;
             _dataInput = dataInput;
+        }
+
+        public void SetDefaultDisplaies(IDisplay trainDisplay, IDisplay carriageDisplay)
+        {
+            _trainDisplay = trainDisplay;
+            _carriageDisplay = carriageDisplay;
         }
 
         public object Create()
@@ -30,24 +35,17 @@ namespace Trains
 
             if (_ticketsCount > 0)
             {
-                train = new Train();
-
-                int freeTickets = _ticketsCount;
-
-                while(freeTickets > 0)
-                {
-                    Carriage carriage = CreateCarriage();
-
-                    if (train.TryAddCarriage(carriage))
-                    {
-                        freeTickets -= carriage.SeatsCount;
-                    }
-                }
-
-                _display.Print(train);
+                train = CreateTrain();
+                _display.Display(this);
+                train.Display();
             }
 
             return train;
+        }
+
+        public void SetDirection(Direction direction)
+        {
+            _direction = direction;
         }
 
         public void SetTickets(int count)
@@ -59,13 +57,37 @@ namespace Trains
             else
             {
                 ErrorMessage errorMessage = new ErrorMessage("Неверное количество билетов");
-                _display.Print(errorMessage);
+                _display.Display(errorMessage);
             }
+        }
+
+        public override string ToString()
+        {
+            return _direction.ToString();
+        }
+
+        private Train CreateTrain()
+        {
+            Train train = new Train(_direction, _trainDisplay, _carriageDisplay);
+
+            int freeTickets = _ticketsCount;
+
+            while (freeTickets > 0)
+            {
+                Carriage carriage = CreateCarriage();
+
+                if (train.TryAddCarriage(carriage))
+                {
+                    freeTickets -= carriage.SeatsCount;
+                }
+            }
+
+            return train;
         }
 
         private Carriage CreateCarriage()
         {
-            CarriageType carriageType = (CarriageType)_dataInput.GetNumber();
+            CarriageType carriageType = (CarriageType)_dataInput.Get();
 
             switch (carriageType)
             {

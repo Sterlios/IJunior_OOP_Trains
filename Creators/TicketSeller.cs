@@ -1,26 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Trains
+﻿namespace Trains
 {
-    class TicketSeller : ICreator
+    class TicketSeller : ICreator, IString
     {
-        private IDataInput _dataInput;
-        private IPrinter _display;
+        private INumberInput _dataInput;
+        private IDisplay _display;
+        private int _tickets;
 
-        public TicketSeller(IPrinter display, IDataInput dataInput)
+        public TicketSeller(IDisplay display, INumberInput dataInput)
         {
+            _tickets = 0;
             _display = display;
             _dataInput = dataInput;
         }
 
         public object Create()
         {
-            Tickets tickets = new Tickets(_dataInput.GetNumber());
-            _display.Print(tickets);
+            _tickets = _dataInput.Get();
+            _display.Display(this);
 
-            return tickets.Count;
+            return _tickets;
+        }
+
+        public override string ToString()
+        {
+            return _tickets.ToString();
         }
     }
 }
